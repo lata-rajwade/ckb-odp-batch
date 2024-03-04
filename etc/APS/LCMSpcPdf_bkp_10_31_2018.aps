@@ -1,0 +1,132 @@
+'AUTO/PILOT SCRIPT LanguageNeutral Version 2.0 Release 2009.1 FileCode 156544
+
+9-10-10
+5-10-1' Object Name: publish on LCMaps|' Object Name: publish on LCMaps|0
+5-10-1' Functionality: Create PDFs of Planogram defined in certain named print list' Functionality: Create PDFs of Planogram defined in certain named print list0
+5-10-1' Visibility: LCM' Visibility: LCM0
+5-10-1' Parameters:' Parameters:0
+5-10-1' Current Verision: Version 0.1, 9/22/2016, Davinder' Current Verision: Version 0.1, 9/22/2016, Davinder0
+1102140-1On error continueON ERROR CONTINUE0
+11029900Hide applicationHIDE APPLICATION0
+9-10-10
+5-10-1'connect to ikb database'connect to ikb database0
+110243115447"CKB | chgd05dbs047p:1551/CKBPRD01 | ckb""CKB | chgd05dbs047p:1551/CKBPRD01 | ckb"True2Select database {Database="CKB | chgd05dbs047p:1551/CKBPRD01 | ckb"}SELECT DATABASE0
+9-10-10
+7-100err = ""err = ""0
+7-100V=""V=""0
+7-100C=""C=""0
+7-100L=""L=""0
+7-100S=""S=""0
+7-100count=0count=00
+9-10-10
+5-10-1'The Path for Backup Directory'The Path for Backup Directory0
+7-10-1vWorkingDirectory = "\\USHQFS1\Planograms$\JDA_PRD_Staging_D\"vWorkingDirectory = "\\USHQFS1\Planograms$\JDA_PRD_Staging_D\"0
+7-10-1vBackupDirectory = vWorkingDirectory & "PLANOGRAM PDF"vBackupDirectory = vWorkingDirectory & "PLANOGRAM PDF"0
+9-10-10
+5-10-1'The path for log file'The path for log file0
+7-100vWorkingDirectorylog = "\\USHQFS1\Planograms$\JDA_PRD_Staging_D\"vWorkingDirectorylog = "\\USHQFS1\Planograms$\JDA_PRD_Staging_D\"0
+7-100vBackupDirectorylog = vWorkingDirectory & "log"vBackupDirectorylog = vWorkingDirectory & "log"0
+9-10-10
+7-100v_time = 11042(Time(),":","")v_time = Replace(Time(),":","")0
+9-10-10
+5-100'create script working directories'create script working directories0
+8-10010199 11059(vWorkingDirectory) = 20018 10272If CheckPath(vWorkingDirectory) = FALSE Then0
+110123115254vWorkingDirectoryvWorkingDirectoryTrue0Create new directory {DirectoryName=vWorkingDirectory}CREATE NEW DIRECTORY5
+11016300End IfEND IF0
+8-10010199 11059(vBackupDirectory) = 20018 10272If CheckPath(vBackupDirectory) = FALSE Then0
+110123115254vBackupDirectoryvBackupDirectoryTrue0Create new directory {DirectoryName=vBackupDirectory}CREATE NEW DIRECTORY5
+11016300End IfEND IF0
+8-10010199 11059(vWorkingDirectorylog) = 20018 10272If CheckPath(vWorkingDirectorylog) = FALSE Then0
+110123115254vWorkingDirectorylogvWorkingDirectorylogTrue0Create new directory {DirectoryName=vWorkingDirectorylog}CREATE NEW DIRECTORY5
+11016300End IfEND IF0
+8-10010199 11059(vBackupDirectorylog) = 20018 10272If CheckPath(vBackupDirectorylog) = FALSE Then0
+110123115254vBackupDirectorylogvBackupDirectorylogTrue0Create new directory {DirectoryName=vBackupDirectorylog}CREATE NEW DIRECTORY5
+11016300End IfEND IF0
+9-10-10
+5-100'Delete exisiting Log File'Delete exisiting Log File0
+110133115280vBackupDirectorylog&"\PDFlog_"&11010()&v_time&".txt"vBackupDirectorylog&"\PDFlog_"&Date()&v_time&".txt"True0Delete file {FileName=vBackupDirectorylog&"\PDFlog_"&Date()&v_time&".txt"}DELETE FILE0
+9-1000
+5-100'Open Temporary Log File'Open Temporary Log File0
+110219115280vBackupDirectorylog&"\PDFlog_"&11010()&v_time&".txt"vBackupDirectorylog&"\PDFlog_"&Date()&v_time&".txt"True0Open output file {FileName=vBackupDirectorylog&"\PDFlog_"&Date()&v_time&".txt"}OPEN OUTPUT FILE0
+9-10-10
+5-10-1'Get Planogram DBKey'Get Planogram DBKey0
+110321315450"aPlanogram""aPlanogram"True15463"SPCPDFLCM""SPCPDFLCM"True15511"Shared""Shared"True-1Ikb execute query {ArrayName="aPlanogram"} {QueryName="SPCPDFLCM"} {QueryType="Shared"}IKB EXECUTE QUERY0
+110284115423"Started Script""Started Script"True0Write to file {Value="Started Script"}WRITE TO FILE0
+8-10-110199 11074("aPlanogram") = 20018 10272If IsArray("aPlanogram") = FALSE Then0
+110197115385"End_Script""End_Script"True-1Go to {ScriptLabel="End_Script"}GO TO5
+1101630-1End IfEND IF0
+9-10-10
+110309115450"aPlanogram""aPlanogram"True0For array rows {ArrayName="aPlanogram"}FOR ARRAY ROWS0
+7-100err=""err=""5
+5-10-1'open  Planogram from database'open  Planogram from database5
+9-10-15
+7-10-1vPOGDBKey = 11060("aPlanogram")vPOGDBKey = GetArrayValue("aPlanogram")5
+9-10-15
+110220115246vPOGDBKeyvPOGDBKeyTrue0Open planogram from database {DBKey=vPOGDBKey}OPEN PLANOGRAM FROM DATABASE5
+5-10-1'Get Layout info from planogram, if not available use default layout'Get Layout info from planogram, if not available use default layout5
+7-100vLayout = 11053("Planogram","Layout file name")vLayout = GetValue("Planogram","Layout file name")5
+9-1005
+8-10010199 vLayout = "" 10272If vLayout = "" Then5
+5-100' log message if error' log message if error10
+9-10010
+7-100V = "Layout field not populated for Planogram "&vPOGDBKeyV = "Layout field not populated for Planogram "&vPOGDBKey10
+7-100err=err&V&11077(13)err=err&V&Chr(13)10
+7-10-1PDFInfo =  errPDFInfo =  err10
+5-10-1'Write information to Temporary Log File'Write information to Temporary Log File10
+110284115423PDFInfoPDFInfoTrue-1Write to file {Value=PDFInfo}WRITE TO FILE10
+9-10010
+11014800ElseELSE5
+9-10010
+8-100If(11007(vLayout,":\"))>0 10272If(Contains(vLayout,":\"))>0 Then10
+9-10015
+7-100L="Invalid layout path defined for Planogram "&vPOGDBKeyL="Invalid layout path defined for Planogram "&vPOGDBKey15
+7-100err=err&L&11077(13)err=err&L&Chr(13)15
+7-10-1PDFInfo =  errPDFInfo =  err15
+5-10-1'Write information to Temporary Log File'Write information to Temporary Log File15
+110284115423PDFInfoPDFInfoTrue-1Write to file {Value=PDFInfo}WRITE TO FILE15
+11014800ElseELSE10
+7-100vcheck = 11002( vLayout)vcheck = CheckFilePath( vLayout)15
+8-10010199 vcheck = 0 10272If vcheck = 0 Then15
+9-10020
+7-100C="Layout file not found for Planogram "&vPOGDBKeyC="Layout file not found for Planogram "&vPOGDBKey20
+7-100err=err&C&11077(13)err=err&C&Chr(13)20
+7-10-1PDFInfo =  errPDFInfo =  err20
+5-10-1'Write information to Temporary Log File'Write information to Temporary Log File20
+110284115423PDFInfoPDFInfoTrue-1Write to file {Value=PDFInfo}WRITE TO FILE20
+11014800ElseELSE15
+9-10020
+5-100' Set Variables for use with print command' Set Variables for use with print command20
+5-100' Set location for PDF to be created in and also setup string for naming convention' Set location for PDF to be created in and also setup string for naming convention20
+5-100' Naming convention can be made up of any values that are included in the array and query' Naming convention can be made up of any values that are included in the array and query20
+9-10020
+7-100vPOGName = 11053("Planogram","Name")vPOGName = GetValue("Planogram","Name")20
+7-100vPDFname = vBackupDirectory&"\"&vPOGName&".pdf"vPDFname = vBackupDirectory&"\"&vPOGName&".pdf"20
+110317115459"30000""30000"True-1Set delay interval {DelayInterval="30000"}SET DELAY INTERVAL20
+9-10020
+5-100'This prints the file to the PDF'This prints the file to the PDF20
+110228415307vLayoutvLayoutTrue15389"Current planogram""Current planogram"True15353"JDA PDF Writer""JDA PDF Writer"True15280vPDFnamevPDFnameTrue0Print using layout {LayoutFile=vLayout} {Selection="Current planogram"} {Printer="JDA PDF Writer"} {FileName=vPDFname}PRINT USING LAYOUT20
+7-100S=S&vPOGDBKey&","S=S&vPOGDBKey&","20
+7-100count=count+1count=count+120
+11016300End IfEND IF15
+11016300End IfEND IF10
+11016300End IfEND IF5
+9-1005
+11011600Close project fileCLOSE PROJECT FILE5
+9-1005
+11033700End array rowsEND ARRAY ROWS0
+9-10-10
+8-10-110199 count >0 10272If count >0 Then0
+7-100PDFInfo =  "Successfully PDF created for :" & SPDFInfo =  "Successfully PDF created for :" & S5
+5-10-1'Write information to Temporary Log File'Write information to Temporary Log File5
+110284115423PDFInfoPDFInfoTrue0Write to file {Value=PDFInfo}WRITE TO FILE5
+1101630-1End IfEND IF0
+9-10-10
+5-100'cleanup'cleanup0
+110302115450"aPlanogram""aPlanogram"True0Delete array {ArrayName="aPlanogram"}DELETE ARRAY0
+9-1000
+9-10-10
+6-10-1:End_Script:End_Script0
+9-10-10
+110284115423"END Script""END Script"True0Write to file {Value="END Script"}WRITE TO FILE0
+5-100'Close Temporary Log File'Close Temporary Log File0
+11011300Close output fileCLOSE OUTPUT FILE0

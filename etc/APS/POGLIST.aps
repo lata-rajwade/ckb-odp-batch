@@ -1,0 +1,37 @@
+'AUTO/PILOT SCRIPT LanguageNeutral Version 2.0 Release 2009.1 FileCode 43567
+
+9-10-10
+5-100'The Path for Backup Directory'The Path for Backup Directory0
+7-100vWorkingDirectory = "\\USHQFS1\Storemaps$\PDF\"vWorkingDirectory = "\\USHQFS1\Storemaps$\PDF\"0
+7-100vBackupDirectory = vWorkingDirectory & "POGLIST"vBackupDirectory = vWorkingDirectory & "POGLIST"0
+9-1000
+5-100'**The Path for Default Layout file'**The Path for Default Layout file0
+5-100'vLayoutPath = "D:\JDA\Intactix\Floor Planning\Layout\SampleLayout.PFY"'vLayoutPath = "D:\JDA\Intactix\Floor Planning\Layout\SampleLayout.PFY"0
+5-100'vLayoutPath="\\ODSC03\SPPO$\JDASM\FP\Layout\Sample Layout.pfy"'vLayoutPath="\\ODSC03\SPPO$\JDASM\FP\Layout\Sample Layout.pfy"0
+9-1000
+5-100'create script working directories'create script working directories0
+8-10010199 11059(vWorkingDirectory) = 20018 10272If CheckPath(vWorkingDirectory) = FALSE Then0
+110123115254vWorkingDirectoryvWorkingDirectoryTrue0Create new directory {DirectoryName=vWorkingDirectory}CREATE NEW DIRECTORY5
+11016300End IfEND IF0
+8-10010199 11059(vBackupDirectory) = 20018 10272If CheckPath(vBackupDirectory) = FALSE Then0
+110123115254vBackupDirectoryvBackupDirectoryTrue0Create new directory {DirectoryName=vBackupDirectory}CREATE NEW DIRECTORY5
+11016300End IfEND IF0
+9-10-10
+5-100'Delete file {FileName=vBackupDirectory&"\poglist_"&Date()&".txt"}'Delete file0
+5-100'Delete file {FileName=vBackupDirectory&"\poglist.txt"}'Delete file0
+9-10-10
+110219115280vBackupDirectory&"\poglist.txt"vBackupDirectory&"\poglist.txt"True0Open output file {FileName=vBackupDirectory&"\poglist.txt"}OPEN OUTPUT FILE0
+110321315450PogListPogListTrue15463"LIVE POG LIST""LIVE POG LIST"True15511"Shared""Shared"True0Ikb execute query {ArrayName=PogList} {QueryName="LIVE POG LIST"} {QueryType="Shared"}IKB EXECUTE QUERY0
+9-10-10
+8-10010199 11074("PogList") = 20018 10272If IsArray("PogList") = FALSE Then0
+110197115385"End_Script""End_Script"True0Go to {ScriptLabel="End_Script"}GO TO5
+11016300End IfEND IF0
+9-10-10
+110309115450"PogList""PogList"True-1For array rows {ArrayName="PogList"}FOR ARRAY ROWS0
+9-1000
+11028411542311060(PogList)GetArrayValue(PogList)True0Write to file {Value=GetArrayValue(PogList)}WRITE TO FILE3
+1103370-1End array rowsEND ARRAY ROWS0
+9-10-10
+6-100:End_Script:End_Script0
+9-10-10
+9-10-10

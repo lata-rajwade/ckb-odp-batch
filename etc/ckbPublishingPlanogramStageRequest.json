@@ -1,0 +1,5 @@
+{"requestType":"PLANOGRAM",
+ "requestPublishType":"STAGE",
+ "inputPath":"\\\\USHQFS1\\Planograms$\\JDA_PRD_Staging_D\\PLANOGRAM PDF",
+ "outputRootPath":"\\\\USHQFS1\\Planograms$\\Pending_Planograms"
+}

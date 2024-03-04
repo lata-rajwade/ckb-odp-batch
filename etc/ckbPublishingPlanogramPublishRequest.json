@@ -1,0 +1,7 @@
+{"requestType":"PLANOGRAM",
+ "requestPublishType":"PUBLISH",
+  "inputPath":"\\\\USHQFS1\\Storemaps$\\PDF\\POGLIST",
+ "outputRootPath":"\\\\USHQFS1\\Planograms$\\Pending_Planograms",
+ "outputRootPublishPath":"\\\\USHQFS1\\Planograms$\\Planograms"
+}
+
